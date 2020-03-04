@@ -45,22 +45,22 @@ class SelfPlay(object):
                 self.logger.dump('%d: %s' % (n, self.dialog.show_metrics()), forced=True)
 
 
-def get_agent_type(model, smart=False):
+def get_agent_type(model, smart=True):
     if isinstance(model, LatentClusteringPredictionModel):
         if smart:
             return LatentClusteringRolloutAgent
         else:
-            return LatentClusteringAgent
+            return LatentClusteringRolloutAgent
     elif isinstance(model, RnnModel):
         if smart:
             return RnnRolloutAgent
         else:
-            return RnnAgent
+            return RnnRolloutAgent
     elif isinstance(model, BaselineClusteringModel):
         if smart:
             return BaselineClusteringRolloutAgent
         else:
-            return BaselineClusteringAgent
+            return BaselineClusteringRolloutAgent
     else:
         assert False, 'unknown model type: %s' % (model)
 
@@ -130,13 +130,13 @@ def main():
     utils.set_seed(args.seed)
 
     alice_model = utils.load_model(args.alice_model_file)
-    alice_ty = get_agent_type(alice_model, args.smart_alice)
-    alice = alice_ty(alice_model, args, name='Alice', train=False, diverse=args.diverse_alice)
+    alice_ty = get_agent_type(alice_model, True)
+    alice = alice_ty(alice_model, args, name='Alice', train=False, diverse=True)
     alice.vis = args.visual
 
     bob_model = utils.load_model(args.bob_model_file)
-    bob_ty = get_agent_type(bob_model, args.smart_bob)
-    bob = bob_ty(bob_model, args, name='Bob', train=False, diverse=args.diverse_bob)
+    bob_ty = get_agent_type(bob_model, True)
+    bob = bob_ty(bob_model, args, name='Bob', train=False, diverse=True)
 
     bob.vis = False
 

@@ -67,7 +67,7 @@ def main():
 
     human = HumanAgent(domain.get_domain(args.domain))
 
-    alice_ty = RnnRolloutAgent if args.smart_ai else HierarchicalAgent
+    alice_ty = RnnRolloutAgent if args.smart_ai else RnnRolloutAgent
     ai = alice_ty(utils.load_model(args.model_file), args)
 
 
